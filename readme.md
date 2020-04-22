@@ -26,6 +26,5 @@ node producerTest.js
 
 ## Todo for lab
 - Implement a simple 1 producer 1 consumer conveyor
-- Create a basic express app with 2 endpoints
-- each endpoint adds an item to a different queue topic
-- Create a simple consumer to process the item from the queue (just print for now) (2 instances total)
+- Create 2 express services with 1 endpoint each
+- Have both express services produce messages, have a single consumer process them
