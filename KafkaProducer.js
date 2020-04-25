@@ -2,6 +2,10 @@ const kafka = require('kafka-node');
 const HighLevelProducer = kafka.HighLevelProducer;
 const Client = kafka.KafkaClient;
 
+const producerOptions = {
+  kafkaHost: (process.env.KAFKA_HOST + ":" + process.env.KAFKA_PORT) || 'localhost:9092',
+};
+
 class KafkaProducer {
   constructor(topic) {
     this.topic = topic;
@@ -9,7 +13,7 @@ class KafkaProducer {
   }
 
   connect(callback) {
-    const client = new Client();
+    const client = new Client(producerOptions);
     this.producer = new HighLevelProducer(client);
     callback();
   }
