@@ -10,10 +10,59 @@ services:
     image : wurstmeister/kafka
     ports:
       - "9092:9092"
+    depends_on:
+      - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: "kafka"
       KAFKA_ADVERTISED_PORT: "9092"
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+    networks:
+      - webnet
+  consumerTest:
+    image: node
+    depends_on:
+      - kafka
+    working_dir: /home/node/app/.
+    environment:
+      NODE_ENV: "development"
+      KAFKA_HOST: "kafka"
+      KAFKA_PORT: "9092"
+    volumes:
+      - .:/home/node/app/:ro
+      - ./node_modules/:/home/node/app/node_modules/:ro
+    command: "npm run start-consumer"
+    networks:
+      - webnet
+  producerTest:
+    image: node
+    depends_on:
+      - kafka
+    working_dir: /home/node/app/.
+    environment:
+      NODE_ENV: "development"
+      KAFKA_HOST: "kafka"
+      KAFKA_PORT: "9092"
+    volumes:
+      - .:/home/node/app/:ro
+      - ./node_modules/:/home/node/app/node_modules/:ro
+    command: "npm run start-producer"
+    networks:
+      - webnet
+  server:
+    image: node
+    ports:
+      - "3000:3000"
+    depends_on:
+      - kafka
+    working_dir: /home/node/app/.
+    environment:
+      NODE_ENV: "development"
+      KAFKA_HOST: "kafka"
+      KAFKA_PORT: "9092"
+    volumes:
+      - .:/home/node/app/:ro
+      - ./node_modules/:/home/node/app/node_modules/:ro
+    command: "npm start"
     networks:
       - webnet
 networks:
