@@ -4,4 +4,4 @@ cron.schedule('* * * * * *', () => {
   console.log('running this task second');
 });
 
-console.log('startin!')
+console.log('startin!');
